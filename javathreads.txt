@@ -1,0 +1,78 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Iterator;
+//example of java synchronized method  
+class Table{  
+ 
+    static int maxval=Integer.MIN_VALUE,resval=0;
+    public synchronized void printTable(int a,int b){  //synchronized method  
+        int cnt,max=Integer.MIN_VALUE,result=0;
+        
+        for(int i=a;i<=b;i++)
+        {
+            cnt=0;
+            for(int j=2;j<i;j++)
+            {
+                if(i%j==0)
+                {    
+                    cnt++;
+                }
+            }
+            if(cnt>max)
+            {
+                result = i;
+                max = cnt;
+            }
+        }
+        if(maxval<=max)
+        {
+            maxval=max;
+            resval=result;
+        }
+    }  
+    public int[] getFinalResult()
+    {
+        return new int[]{maxval,resval};
+    }
+    
+}  
+  
+class MyThread extends Thread{  
+    Table t;  
+    int a,b;
+    MyThread(Table t,int a,int b){  
+        this.t=t;  
+        this.a=a;
+        this.b=b;
+    }  
+    public void run(){  
+        t.printTable(a,b);
+    }
+}  
+
+  
+public class TestSynchronization2{  
+    public static void main(String args[]) throws Exception{  
+        Scanner sc = new Scanner(System.in);
+        int value, kvalue;
+        int[] result = new int[2];
+        Table obj = new Table();//only one object 
+        System.out.println("Enter the value: ");
+        value = sc.nextInt();
+        
+        MyThread[] t = new MyThread[10]; 
+        //1000
+        kvalue = value/10; //100
+        int j=1,k=kvalue;
+        for(int i=0;i<10;i++)
+        {
+            t[i] = new MyThread(obj,j,k);
+            t[i].start();
+            t[i].join();
+            j+=kvalue;//1 101
+            k+=kvalue;//100 200
+        }
+        result = obj.getFinalResult();
+        System.out.printf("Result: %d Count: %d \n",result[1],result[0]);
+    }  
+}
