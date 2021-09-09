@@ -29,6 +29,10 @@ class Table{
             maxval=max;
             resval=result;
         }
+        System.out.printf("The number that has maximum number of divisors from %d to %d is : %d",a,b,result);
+        System.out.println();
+        System.out.println("Count = "+max);
+
     }  
     public int[] getFinalResult()
     {
@@ -64,14 +68,18 @@ public class TestSynchronization2{
         //1000
         kvalue = value/10; //100
         int j=1,k=kvalue;
+       
         for(int i=0;i<10;i++)
         {
             t[i] = new MyThread(obj,j,k);
             t[i].start();
-            t[i].join();
             j+=kvalue;//1 101
             k+=kvalue;//100 200
         }
+        
+        for(int l=0;l<10;l++)
+         t[l].join();
+         
         result = obj.getFinalResult();
         System.out.printf("Result: %d Count: %d \n",result[1],result[0]);
     }  
